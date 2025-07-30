@@ -1,4 +1,4 @@
-# 物业管理系统
+# Property Management System / 物业管理系统
 
 一个基于Node.js + Express + MySQL的智能物业管理系统，支持业主管理、房产管理、收费管理、车辆管理等功能。
 
