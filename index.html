@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物业管理系统 - 状态页</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background: #f0f2f5; }
+        .card { background: white; border-radius: 10px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .title { color: #2c3e50; margin-bottom: 30px; text-align: center; }
+        .link { display: block; background: #3498db; color: white; padding: 15px; margin: 10px 0; text-decoration: none; border-radius: 8px; text-align: center; font-weight: bold; }
+        .link:hover { background: #2980b9; }
+        .link.test { background: #27ae60; }
+        .link.test:hover { background: #219a52; }
+        .info { background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0; color: #1565c0; }
+        .chinese-demo { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 class="title">🏠 物业管理系统</h1>
+        
+        <div class="chinese-demo">
+            <h3>📝 中文显示测试</h3>
+            <p>如果你能正常看到这些中文字符，说明编码正常：</p>
+            <p><strong>业主管理 | 房产信息 | 收费统计 | 数据分析</strong></p>
+        </div>
+
+        <div class="info">
+            ℹ️ <strong>系统状态：</strong>已启动 | <strong>端口：</strong>8080 | <strong>编码：</strong>UTF-8
+        </div>
+
+        <a href="/frontend/utf8-test.html" class="link test">🧪 UTF-8编码测试页面</a>
+        <a href="/frontend/simple-test.html" class="link test">🔧 简单功能测试</a>
+        <a href="/frontend/index.html" class="link">🌐 完整管理界面</a>
+        
+        <div class="info">
+            💡 <strong>使用提示：</strong>如果看到乱码，请尝试刷新页面（Ctrl+F5）或检查浏览器编码设置。
+        </div>
+    </div>
+
+    <script>
+        // 简单的连接测试
+        fetch('http://localhost:3000')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'running') {
+                    console.log('✅ 后端服务正常');
+                }
+            })
+            .catch(error => {
+                console.warn('⚠️ 后端服务连接异常:', error);
+            });
+    </script>
+</body>
+</html>
