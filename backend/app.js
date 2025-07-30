@@ -20,6 +20,11 @@ const enhancedVehicleRoutes = require('./routes/enhancedVehicles');
 const reportRoutes = require('./routes/reports');
 const importRoutes = require('./routes/import');
 
+// 增强版路由
+const enhancedCommunityRoutes = require('./routes/enhancedCommunities');
+const enhancedFeeRoutes = require('./routes/enhancedFees');
+const enhancedPaymentRoutes = require('./routes/enhancedPayments');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -30,7 +35,7 @@ app.use(express.json());
 // 静态文件服务 - 提供上传的图片
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 路由
+// 原有路由
 app.use('/api/owners', ownerRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/fees', feeRoutes);
@@ -46,6 +51,11 @@ app.use('/api/decoration', decorationRoutes);
 app.use('/api/enhanced-vehicles', enhancedVehicleRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/import', importRoutes);
+
+// 增强版路由（新的收费系统）
+app.use('/api/v2/communities', enhancedCommunityRoutes);
+app.use('/api/v2/fees', enhancedFeeRoutes);
+app.use('/api/v2/payments', enhancedPaymentRoutes);
 
 // 根路径 - 增加环境信息
 app.get('/', (req, res) => {

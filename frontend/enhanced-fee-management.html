@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物业管理系统 v2.0 - 增强版收费管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+            border-bottom-color: #4c63d2;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-warning {
+            background: #ed8936;
+        }
+        
+        .btn-warning:hover {
+            background: #dd7724;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h4 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 物业管理系统 v2.0</h1>
+            <p>增强版收费管理系统 - 支持多小区、精确计费、自动欠费计算</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('overview')">系统概览</button>
+            <button class="tab-button" onclick="switchTab('communities')">小区管理</button>
+            <button class="tab-button" onclick="switchTab('fee-calculation')">欠费计算</button>
+            <button class="tab-button" onclick="switchTab('bill-generation')">账单生成</button>
+            <button class="tab-button" onclick="switchTab('utilities')">水电管理</button>
+            <button class="tab-button" onclick="switchTab('daily-income')">每日收入</button>
+            <button class="tab-button" onclick="switchTab('deposits')">押金管理</button>
+        </div>
+        
+        <!-- 系统概览 -->
+        <div id="overview" class="tab-content active">
+            <h2>🎯 系统核心功能</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>多小区管理</h4>
+                    <p>支持管理多个小区，每个小区独立配置收费标准</p>
+                </div>
+                <div class="stat-card">
+                    <h4>精确计费</h4>
+                    <p>根据房产性质、车位类型自动计算准确费用</p>
+                </div>
+                <div class="stat-card">
+                    <h4>自动欠费</h4>
+                    <p>基于交付时间自动计算业主所有欠费项目</p>
+                </div>
+                <div class="stat-card">
+                    <h4>押金管理</h4>
+                    <p>支持水费押金、装修押金，可自动扣费</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🚀 新版本特性</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>多小区支持</strong>：一套系统管理多个小区，每个小区独立配置</li>
+                    <li><strong>房产性质管理</strong>：支持普通住宅、公寓、商铺、别墅等不同收费标准</li>
+                    <li><strong>车位类型管理</strong>：地上、地下、立体车库等不同管理费</li>
+                    <li><strong>智能欠费计算</strong>：从交付日期开始，自动计算累计欠费</li>
+                    <li><strong>水电抄表管理</strong>：支持按房产性质设置不同电费单价</li>
+                    <li><strong>押金自动扣费</strong>：水费、装修押金可自动扣除相关费用</li>
+                    <li><strong>每日收入记录</strong>：门禁卡、消防放水费等临时收费</li>
+                    <li><strong>批量账单生成</strong>：按月批量为所有业主生成标准账单</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>📊 API 接口概览</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>功能模块</th>
+                            <th>API 前缀</th>
+                            <th>主要功能</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>小区管理</td>
+                            <td>/api/v2/communities</td>
+                            <td>小区、房产性质、车位类型、收费标准管理</td>
+                        </tr>
+                        <tr>
+                            <td>费用计算</td>
+                            <td>/api/v2/fees</td>
+                            <td>欠费计算、账单生成、水电抄表</td>
+                        </tr>
+                        <tr>
+                            <td>支付管理</td>
+                            <td>/api/v2/payments</td>
+                            <td>押金管理、每日收入、费用记录</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 小区管理 -->
+        <div id="communities" class="tab-content">
+            <h2>🏘️ 小区管理</h2>
+            
+            <div class="card">
+                <h3>获取小区列表</h3>
+                <button class="btn" onclick="getCommunities()">获取所有小区</button>
+                <div id="communities-result" class="result-box" style="display: none;">
+                    <pre id="communities-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>获取小区详情（包含收费标准）</h3>
+                <div class="form-group">
+                    <label>小区ID</label>
+                    <input type="number" id="community-id" placeholder="输入小区ID" value="1">
+                </div>
+                <button class="btn" onclick="getCommunityDetails()">获取小区详情</button>
+                <div id="community-details-result" class="result-box" style="display: none;">
+                    <pre id="community-details-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>设置收费标准</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="rate-community-id" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>收费项目ID</label>
+                        <select id="rate-fee-item-id">
+                            <option value="1">物业费</option>
+                            <option value="2">保洁能耗费</option>
+                            <option value="4">电费</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>房产性质ID（物业费/电费用）</label>
+                        <input type="number" id="rate-property-type-id" placeholder="留空表示通用">
+                    </div>
+                    <div class="form-group">
+                        <label>车位类型ID（车位管理费用）</label>
+                        <input type="number" id="rate-parking-type-id" placeholder="留空表示通用">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>单价（元）</label>
+                        <input type="number" step="0.01" id="rate-unit-price" placeholder="例如：3.0">
+                    </div>
+                    <div class="form-group">
+                        <label>生效日期</label>
+                        <input type="date" id="rate-effective-date" value="2024-01-01">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="setFeeRate()">设置收费标准</button>
+                <div id="set-rate-result" class="result-box" style="display: none;">
+                    <pre id="set-rate-data"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 欠费计算 -->
+        <div id="fee-calculation" class="tab-content">
+            <h2>💰 欠费计算</h2>
+            
+            <div class="card">
+                <h3>计算业主欠费</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>业主ID</label>
+                        <input type="number" id="owner-id" placeholder="输入业主ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>计算截止日期</label>
+                        <input type="date" id="as-of-date" value="">
+                    </div>
+                </div>
+                <button class="btn" onclick="calculateOutstandingFees()">计算欠费</button>
+                <div id="outstanding-result" class="result-box" style="display: none;">
+                    <pre id="outstanding-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>为业主生成欠费账单</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>业主ID</label>
+                        <input type="number" id="bill-owner-id" placeholder="输入业主ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>账单到期日期</label>
+                        <input type="date" id="bill-due-date" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="bill-remark" placeholder="账单备注信息"></textarea>
+                </div>
+                <button class="btn btn-success" onclick="generateOutstandingBills()">生成欠费账单</button>
+                <div id="generate-bills-result" class="result-box" style="display: none;">
+                    <pre id="generate-bills-data"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 账单生成 -->
+        <div id="bill-generation" class="tab-content">
+            <h2>📄 批量账单生成</h2>
+            
+            <div class="card">
+                <h3>批量生成月度账单</h3>
+                <p class="alert alert-info">
+                    为指定小区的所有已交付房产生成当月物业费和车位管理费账单
+                </p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="monthly-community-id" placeholder="输入小区ID，留空表示所有小区" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>账单月份</label>
+                        <input type="month" id="monthly-bill-month" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>账单到期日期</label>
+                    <input type="date" id="monthly-due-date" value="">
+                </div>
+                <button class="btn btn-warning" onclick="generateMonthlyBills()">批量生成月度账单</button>
+                <div id="monthly-bills-result" class="result-box" style="display: none;">
+                    <pre id="monthly-bills-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>查看费用记录</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="records-community-id" placeholder="留空查看所有">
+                    </div>
+                    <div class="form-group">
+                        <label>业主ID</label>
+                        <input type="number" id="records-owner-id" placeholder="留空查看所有">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>缴费状态</label>
+                        <select id="records-status">
+                            <option value="">全部</option>
+                            <option value="unpaid">未缴费</option>
+                            <option value="paid">已缴费</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>每页记录数</label>
+                        <select id="records-limit">
+                            <option value="10">10条</option>
+                            <option value="20" selected>20条</option>
+                            <option value="50">50条</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="getFeeRecords()">查看费用记录</button>
+                <div id="fee-records-result" class="result-box" style="display: none;">
+                    <pre id="fee-records-data"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 水电管理 -->
+        <div id="utilities" class="tab-content">
+            <h2>💧⚡ 水电管理</h2>
+            
+            <div class="card">
+                <h3>抄水表</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>房产ID</label>
+                        <input type="number" id="water-property-id" placeholder="输入房产ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>抄表日期</label>
+                        <input type="date" id="water-reading-date" value="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>当前读数</label>
+                        <input type="number" step="0.01" id="water-current-reading" placeholder="例如：1250.5">
+                    </div>
+                    <div class="form-group">
+                        <label>水费单价（元/吨）</label>
+                        <input type="number" step="0.01" id="water-unit-price" value="3.5">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>抄表类型</label>
+                        <select id="water-reading-type">
+                            <option value="monthly">月度抄表</option>
+                            <option value="special">特殊抄表</option>
+                            <option value="move_in">入住抄表</option>
+                            <option value="move_out">退租抄表</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>抄表员</label>
+                        <input type="text" id="water-reader" placeholder="抄表员姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="water-remark" placeholder="抄表备注"></textarea>
+                </div>
+                <button class="btn btn-success" onclick="createWaterReading()">提交水表读数</button>
+                <div id="water-reading-result" class="result-box" style="display: none;">
+                    <pre id="water-reading-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>抄电表</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>房产ID</label>
+                        <input type="number" id="electricity-property-id" placeholder="输入房产ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>抄表日期</label>
+                        <input type="date" id="electricity-reading-date" value="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>当前读数</label>
+                        <input type="number" step="0.01" id="electricity-current-reading" placeholder="例如：8520.8">
+                    </div>
+                    <div class="form-group">
+                        <label>预付费余额（元）</label>
+                        <input type="number" step="0.01" id="electricity-prepaid-balance" placeholder="预付费余额" value="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>抄表类型</label>
+                        <select id="electricity-reading-type">
+                            <option value="monthly">月度抄表</option>
+                            <option value="special">特殊抄表</option>
+                            <option value="move_in">入住抄表</option>
+                            <option value="move_out">退租抄表</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>抄表员</label>
+                        <input type="text" id="electricity-reader" placeholder="抄表员姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="electricity-remark" placeholder="抄表备注"></textarea>
+                </div>
+                <button class="btn btn-success" onclick="createElectricityReading()">提交电表读数</button>
+                <div id="electricity-reading-result" class="result-box" style="display: none;">
+                    <pre id="electricity-reading-data"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 每日收入 -->
+        <div id="daily-income" class="tab-content">
+            <h2>📊 每日收入管理</h2>
+            
+            <div class="card">
+                <h3>门禁卡收费（快捷方式）</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="card-community-id" placeholder="输入小区ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>房产ID（可选）</label>
+                        <input type="number" id="card-property-id" placeholder="关联房产ID">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>卡片数量</label>
+                        <input type="number" id="card-count" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>单价（元/张）</label>
+                        <input type="number" step="0.01" id="card-unit-price" value="15">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>收费员</label>
+                        <input type="text" id="card-collector" placeholder="收费员姓名">
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <input type="text" id="card-remark" placeholder="额外备注">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="addAccessCardFee()">记录门禁卡收费</button>
+                <div id="card-fee-result" class="result-box" style="display: none;">
+                    <pre id="card-fee-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>消防放水费（快捷方式）</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="fire-community-id" placeholder="输入小区ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>房产ID</label>
+                        <input type="number" id="fire-property-id" placeholder="关联房产ID">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>费用（元）</label>
+                        <input type="number" step="0.01" id="fire-unit-price" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>收费员</label>
+                        <input type="text" id="fire-collector" placeholder="收费员姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <input type="text" id="fire-remark" placeholder="消防放水备注">
+                </div>
+                <button class="btn btn-warning" onclick="addFireWaterFee()">记录消防放水费</button>
+                <div id="fire-fee-result" class="result-box" style="display: none;">
+                    <pre id="fire-fee-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>查看每日收入记录</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>小区ID</label>
+                        <input type="number" id="income-community-id" placeholder="留空查看所有">
+                    </div>
+                    <div class="form-group">
+                        <label>收入类型</label>
+                        <select id="income-type">
+                            <option value="">全部类型</option>
+                            <option value="门禁卡费">门禁卡费</option>
+                            <option value="消防放水费">消防放水费</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>开始日期</label>
+                        <input type="date" id="income-start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>结束日期</label>
+                        <input type="date" id="income-end-date">
+                    </div>
+                </div>
+                <button class="btn" onclick="getDailyIncomeRecords()">查看收入记录</button>
+                <div id="income-records-result" class="result-box" style="display: none;">
+                    <pre id="income-records-data"></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 押金管理 -->
+        <div id="deposits" class="tab-content">
+            <h2>💳 押金管理</h2>
+            
+            <div class="card">
+                <h3>创建押金记录</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>房产ID</label>
+                        <input type="number" id="deposit-property-id" placeholder="输入房产ID" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>押金类型</label>
+                        <select id="deposit-type">
+                            <option value="水费押金">水费押金</option>
+                            <option value="装修押金">装修押金</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>押金金额（元）</label>
+                        <input type="number" step="0.01" id="deposit-amount" placeholder="例如：200.00">
+                    </div>
+                    <div class="form-group">
+                        <label>缴费日期</label>
+                        <input type="date" id="deposit-paid-date" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>自动扣费</label>
+                    <select id="deposit-auto-deduct">
+                        <option value="false">否</option>
+                        <option value="true">是</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="deposit-remark" placeholder="押金备注"></textarea>
+                </div>
+                <button class="btn btn-success" onclick="createDepositRecord()">创建押金记录</button>
+                <div id="create-deposit-result" class="result-box" style="display: none;">
+                    <pre id="create-deposit-data"></pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>查看押金记录</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>业主ID</label>
+                        <input type="number" id="view-deposit-owner-id" placeholder="留空查看所有">
+                    </div>
+                    <div class="form-group">
+                        <label>押金类型</label>
+                        <select id="view-deposit-type">
+                            <option value="">全部类型</option>
+                            <option value="水费押金">水费押金</option>
+                            <option value="装修押金">装修押金</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>押金状态</label>
+                    <select id="view-deposit-status">
+                        <option value="">全部状态</option>
+                        <option value="active">有效</option>
+                        <option value="depleted">耗尽</option>
+                        <option value="refunded">已退还</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="getDepositRecords()">查看押金记录</button>
+                <div id="view-deposits-result" class="result-box" style="display: none;">
+                    <pre id="view-deposits-data"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        
+        // 设置默认日期
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const nextMonth = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const nextMonthStr = nextMonth.toISOString().split('T')[0];
+            
+            // 设置默认日期
+            document.getElementById('as-of-date').value = today;
+            document.getElementById('bill-due-date').value = nextMonthStr;
+            document.getElementById('monthly-due-date').value = nextMonthStr;
+            document.getElementById('water-reading-date').value = today;
+            document.getElementById('electricity-reading-date').value = today;
+            document.getElementById('deposit-paid-date').value = today;
+            
+            // 设置默认月份
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            document.getElementById('monthly-bill-month').value = currentMonth;
+        });
+        
+        // 切换标签页
+        function switchTab(tabName) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有按钮的活动状态
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabName).classList.add('active');
+            
+            // 激活对应的按钮
+            event.target.classList.add('active');
+        }
+        
+        // 通用 API 调用函数
+        async function apiCall(url, options = {}) {
+            try {
+                showLoading(options.resultId);
+                const response = await fetch(API_BASE + url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    ...options
+                });
+                const data = await response.json();
+                showResult(options.resultId, data);
+                return data;
+            } catch (error) {
+                showResult(options.resultId, { error: error.message });
+                console.error('API调用失败:', error);
+            }
+        }
+        
+        function showLoading(resultId) {
+            if (resultId) {
+                const resultBox = document.getElementById(resultId);
+                const dataElement = document.getElementById(resultId.replace('-result', '-data'));
+                resultBox.style.display = 'block';
+                dataElement.innerHTML = '<div class="loading">加载中...</div>';
+            }
+        }
+        
+        function showResult(resultId, data) {
+            if (resultId) {
+                const resultBox = document.getElementById(resultId);
+                const dataElement = document.getElementById(resultId.replace('-result', '-data'));
+                resultBox.style.display = 'block';
+                dataElement.textContent = JSON.stringify(data, null, 2);
+            }
+        }
+        
+        // 小区管理相关函数
+        async function getCommunities() {
+            await apiCall('/api/v2/communities', {
+                resultId: 'communities-result'
+            });
+        }
+        
+        async function getCommunityDetails() {
+            const communityId = document.getElementById('community-id').value;
+            if (!communityId) {
+                alert('请输入小区ID');
+                return;
+            }
+            
+            await apiCall(`/api/v2/communities/${communityId}`, {
+                resultId: 'community-details-result'
+            });
+        }
+        
+        async function setFeeRate() {
+            const data = {
+                community_id: parseInt(document.getElementById('rate-community-id').value),
+                fee_item_id: parseInt(document.getElementById('rate-fee-item-id').value),
+                unit_price: parseFloat(document.getElementById('rate-unit-price').value),
+                effective_date: document.getElementById('rate-effective-date').value
+            };
+            
+            const propertyTypeId = document.getElementById('rate-property-type-id').value;
+            const parkingTypeId = document.getElementById('rate-parking-type-id').value;
+            
+            if (propertyTypeId) data.property_type_id = parseInt(propertyTypeId);
+            if (parkingTypeId) data.parking_type_id = parseInt(parkingTypeId);
+            
+            await apiCall('/api/v2/communities/fee-rates', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'set-rate-result'
+            });
+        }
+        
+        // 欠费计算相关函数
+        async function calculateOutstandingFees() {
+            const ownerId = document.getElementById('owner-id').value;
+            const asOfDate = document.getElementById('as-of-date').value;
+            
+            if (!ownerId) {
+                alert('请输入业主ID');
+                return;
+            }
+            
+            let url = `/api/v2/fees/outstanding/${ownerId}`;
+            if (asOfDate) {
+                url += `?as_of_date=${asOfDate}`;
+            }
+            
+            await apiCall(url, {
+                resultId: 'outstanding-result'
+            });
+        }
+        
+        async function generateOutstandingBills() {
+            const ownerId = document.getElementById('bill-owner-id').value;
+            const dueDate = document.getElementById('bill-due-date').value;
+            const remark = document.getElementById('bill-remark').value;
+            
+            if (!ownerId) {
+                alert('请输入业主ID');
+                return;
+            }
+            
+            const data = {
+                due_date: dueDate,
+                remark: remark
+            };
+            
+            await apiCall(`/api/v2/fees/generate-outstanding/${ownerId}`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'generate-bills-result'
+            });
+        }
+        
+        // 账单生成相关函数
+        async function generateMonthlyBills() {
+            const communityId = document.getElementById('monthly-community-id').value;
+            const billMonth = document.getElementById('monthly-bill-month').value;
+            const dueDate = document.getElementById('monthly-due-date').value;
+            
+            if (!billMonth || !dueDate) {
+                alert('请填写账单月份和到期日期');
+                return;
+            }
+            
+            const data = {
+                bill_month: billMonth,
+                due_date: dueDate
+            };
+            
+            if (communityId) {
+                data.community_id = parseInt(communityId);
+            }
+            
+            await apiCall('/api/v2/fees/generate-monthly', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'monthly-bills-result'
+            });
+        }
+        
+        async function getFeeRecords() {
+            const params = new URLSearchParams();
+            
+            const communityId = document.getElementById('records-community-id').value;
+            const ownerId = document.getElementById('records-owner-id').value;
+            const status = document.getElementById('records-status').value;
+            const limit = document.getElementById('records-limit').value;
+            
+            if (communityId) params.append('community_id', communityId);
+            if (ownerId) params.append('owner_id', ownerId);
+            if (status) params.append('status', status);
+            if (limit) params.append('limit', limit);
+            
+            await apiCall(`/api/v2/payments/records?${params.toString()}`, {
+                resultId: 'fee-records-result'
+            });
+        }
+        
+        // 水电管理相关函数
+        async function createWaterReading() {
+            const data = {
+                property_id: parseInt(document.getElementById('water-property-id').value),
+                reading_date: document.getElementById('water-reading-date').value,
+                current_reading: parseFloat(document.getElementById('water-current-reading').value),
+                unit_price: parseFloat(document.getElementById('water-unit-price').value),
+                reading_type: document.getElementById('water-reading-type').value,
+                reader: document.getElementById('water-reader').value,
+                remark: document.getElementById('water-remark').value
+            };
+            
+            await apiCall('/api/v2/fees/water-reading', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'water-reading-result'
+            });
+        }
+        
+        async function createElectricityReading() {
+            const data = {
+                property_id: parseInt(document.getElementById('electricity-property-id').value),
+                reading_date: document.getElementById('electricity-reading-date').value,
+                current_reading: parseFloat(document.getElementById('electricity-current-reading').value),
+                reading_type: document.getElementById('electricity-reading-type').value,
+                prepaid_balance: parseFloat(document.getElementById('electricity-prepaid-balance').value || 0),
+                reader: document.getElementById('electricity-reader').value,
+                remark: document.getElementById('electricity-remark').value
+            };
+            
+            await apiCall('/api/v2/fees/electricity-reading', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'electricity-reading-result'
+            });
+        }
+        
+        // 每日收入相关函数
+        async function addAccessCardFee() {
+            const data = {
+                community_id: parseInt(document.getElementById('card-community-id').value),
+                card_count: parseInt(document.getElementById('card-count').value),
+                unit_price: parseFloat(document.getElementById('card-unit-price').value),
+                collector: document.getElementById('card-collector').value,
+                remark: document.getElementById('card-remark').value
+            };
+            
+            const propertyId = document.getElementById('card-property-id').value;
+            if (propertyId) data.property_id = parseInt(propertyId);
+            
+            await apiCall('/api/v2/payments/daily-income/access-card', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'card-fee-result'
+            });
+        }
+        
+        async function addFireWaterFee() {
+            const data = {
+                community_id: parseInt(document.getElementById('fire-community-id').value),
+                property_id: parseInt(document.getElementById('fire-property-id').value),
+                unit_price: parseFloat(document.getElementById('fire-unit-price').value),
+                collector: document.getElementById('fire-collector').value,
+                remark: document.getElementById('fire-remark').value
+            };
+            
+            await apiCall('/api/v2/payments/daily-income/fire-water', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'fire-fee-result'
+            });
+        }
+        
+        async function getDailyIncomeRecords() {
+            const params = new URLSearchParams();
+            
+            const communityId = document.getElementById('income-community-id').value;
+            const incomeType = document.getElementById('income-type').value;
+            const startDate = document.getElementById('income-start-date').value;
+            const endDate = document.getElementById('income-end-date').value;
+            
+            if (communityId) params.append('community_id', communityId);
+            if (incomeType) params.append('income_type', incomeType);
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+            
+            await apiCall(`/api/v2/payments/daily-income?${params.toString()}`, {
+                resultId: 'income-records-result'
+            });
+        }
+        
+        // 押金管理相关函数
+        async function createDepositRecord() {
+            const data = {
+                property_id: parseInt(document.getElementById('deposit-property-id').value),
+                deposit_type: document.getElementById('deposit-type').value,
+                amount: parseFloat(document.getElementById('deposit-amount').value),
+                paid_date: document.getElementById('deposit-paid-date').value,
+                auto_deduct: document.getElementById('deposit-auto-deduct').value === 'true',
+                remark: document.getElementById('deposit-remark').value
+            };
+            
+            await apiCall('/api/v2/payments/deposits', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                resultId: 'create-deposit-result'
+            });
+        }
+        
+        async function getDepositRecords() {
+            const params = new URLSearchParams();
+            
+            const ownerId = document.getElementById('view-deposit-owner-id').value;
+            const depositType = document.getElementById('view-deposit-type').value;
+            const status = document.getElementById('view-deposit-status').value;
+            
+            if (ownerId) params.append('owner_id', ownerId);
+            if (depositType) params.append('deposit_type', depositType);
+            if (status) params.append('status', status);
+            
+            await apiCall(`/api/v2/payments/deposits?${params.toString()}`, {
+                resultId: 'view-deposits-result'
+            });
+        }
+    </script>
+</body>
+</html>
